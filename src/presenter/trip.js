@@ -2,6 +2,7 @@ import { render, RenderPosition } from '../render.js';
 import SortView from '../view/sort.js';
 import ListPointsView from '../view/list-points.js';
 import PointView from '../view/point.js';
+import NoPointView from '../view/no-point.js';
 import EditPointView from '../view/edit-point.js';
 import PointModel from '../model/point-model.js';
 
@@ -57,10 +58,16 @@ export default class Trip {
   }
 
   init() {
-    render(new SortView(), this.#container, RenderPosition.BEFOREEND);
-    render (this.#component, this.#container);
-    for (const point of this.#pointModel.points){
-      this.#renderPoint(point);
+    const points = this.#pointModel.points;
+    if (points.length === 0){
+      render(new NoPointView(), this.#container);
+    }
+    else{
+      render(new SortView(), this.#container, RenderPosition.BEFOREEND);
+      render (this.#component, this.#container);
+      for (const point of this.#pointModel.points){
+        this.#renderPoint(point);
+      }
     }
   }
 }
