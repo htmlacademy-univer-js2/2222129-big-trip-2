@@ -11,12 +11,12 @@ const tripMainElement = document.querySelector('.trip-main');
 const tripControlsElement = headerElement.querySelector('.trip-controls__filters');
 const tripEventsElement = mainElement.querySelector('.trip-events');
 
-const routePresenter = new RoutePresenter();
 const pointsModel = new PointsModel();
+const routePresenter = new RoutePresenter(tripEventsElement, pointsModel);
 const filters = generateFilter(pointsModel.points);
 
 render(new TripInfoView(), tripMainElement, RenderPosition.AFTERBEGIN);
 render(new PointFilterView(filters), tripControlsElement);
 
-routePresenter.init(tripEventsElement, pointsModel);
+routePresenter.init();
 
