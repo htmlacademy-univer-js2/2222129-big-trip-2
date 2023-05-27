@@ -11,6 +11,8 @@ const convertPointDateIntoDay = (pointDate) => dayjs(pointDate).format('MMM D');
 
 const convertPointDateIntoHour = (pointDate) => dayjs(pointDate).format('HH:mm');
 
+const convertPointDateForEditForm = (pointDate) => dayjs(pointDate).format('DD/MM/YY HH:mm');
+
 const generateDates = () => {
   const startDate = dayjs();
   return {
@@ -19,9 +21,7 @@ const generateDates = () => {
   };
 };
 
-const subtractDates = (startDate, endDate) => {
-  const dateFrom = dayjs(startDate);
-  const dateTo = dayjs(endDate);
+const subtractDates = (dateFrom, dateTo) => {
 
   const diffInTotalMinutes = Math.ceil(dateTo.diff(dateFrom, 'minute', true));
   const diffInHours = Math.floor(diffInTotalMinutes / MIN_IN_HOUR) % HOUR_IN_DAY;
@@ -35,8 +35,14 @@ const subtractDates = (startDate, endDate) => {
   return dayjs.duration(diffInTotalMinutes, 'minutes').format('DD[D] HH[H] mm[M]');
 };
 
+const checkDatesRelativeToCurrent = (dateFrom, dateTo) => dateFrom.isBefore(dayjs()) && dateTo.isAfter(dayjs());
+
+const isPointPlanned = (dateFrom, dateTo) => dateFrom.isAfter(dayjs()) || checkDatesRelativeToCurrent(dateFrom, dateTo);
+
+const isPointPassed = (dateFrom, dateTo) => dateTo.isBefore(dayjs()) || checkDatesRelativeToCurrent(dateFrom, dateTo);
+
 const checkFavoriteOption = (isFavorite) => (isFavorite) ? 'event__favorite-btn--active' : '';
 
 const capitalizeFirstLetter = (str) => str[0].toUpperCase() + str.slice(1);
 
-export {convertPointDateIntoDay, convertPointDateIntoHour, generateDates, subtractDates, checkFavoriteOption, capitalizeFirstLetter};
+export {convertPointDateIntoDay, convertPointDateIntoHour, convertPointDateForEditForm, generateDates, subtractDates, checkFavoriteOption, capitalizeFirstLetter, isPointPlanned, isPointPassed};
