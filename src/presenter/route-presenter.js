@@ -1,4 +1,4 @@
-import { render } from '../framework/render.js';
+import { render, remove } from '../framework/render.js';
 import EmptyListView from '../view/empty-list-view.js';
 import PointListView from '../view/point-list-view.js';
 import PointSortView from '../view/sort-view.js';
@@ -10,9 +10,9 @@ import { sortPointsByPrice, sortPointsByDuration, sortPointsByDate } from '../ut
 export default class RoutePresenter {
   #routeContainer = null;
   #pointsModel = null;
+  #sortComponent = null;
 
   #pointListComponent = new PointListView();
-  #sortComponent = new PointSortView();
   #emptyListComponent = new EmptyListView();
 
   #routePoints = [];
@@ -67,9 +67,15 @@ export default class RoutePresenter {
   };
 
   #renderSort = () => {
-    render(this.#sortComponent,this.#routeContainer);
+    if (this.#sortComponent instanceof PointSortView) {
+      remove(this.#sortComponent);
+    }
+
+    this.#sortComponent = new PointSortView(this.#currentSortType);
+    render(this.#sortComponent, this.#routeContainer);
     this.#sortComponent.setSortTypeChangeHandler(this.#handleSortTypeChange);
   };
+
 
   #renderEmptyList = () => {
     render(this.#emptyListComponent, this.#routeContainer);

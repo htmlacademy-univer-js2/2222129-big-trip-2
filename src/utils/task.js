@@ -23,7 +23,7 @@ const generateDates = () => {
 
 const subtractDates = (dateFrom, dateTo) => {
 
-  const diffInTotalMinutes = Math.ceil(dateTo.diff(dateFrom, 'minute', true));
+  const diffInTotalMinutes = Math.ceil(dayjs(dateTo).diff(dayjs(dateFrom), 'minute', true));
   const diffInHours = Math.floor(diffInTotalMinutes / MIN_IN_HOUR) % HOUR_IN_DAY;
   const diffInDays = Math.floor(diffInTotalMinutes / (MIN_IN_HOUR * HOUR_IN_DAY));
 
@@ -35,14 +35,16 @@ const subtractDates = (dateFrom, dateTo) => {
   return dayjs.duration(diffInTotalMinutes, 'minutes').format('DD[D] HH[H] mm[M]');
 };
 
-const checkDatesRelativeToCurrent = (dateFrom, dateTo) => dateFrom.isBefore(dayjs()) && dateTo.isAfter(dayjs());
+const isSubmitDisabledByDate = (dateTo, dateFrom) => dayjs(dateTo).diff(dayjs(dateFrom)) <= 0;
 
-const isPointPlanned = (dateFrom, dateTo) => dateFrom.isAfter(dayjs()) || checkDatesRelativeToCurrent(dateFrom, dateTo);
+const checkDatesRelativeToCurrent = (dateFrom, dateTo) => dayjs(dateFrom).isBefore(dayjs()) && dayjs(dateTo).isAfter(dayjs());
 
-const isPointPassed = (dateFrom, dateTo) => dateTo.isBefore(dayjs()) || checkDatesRelativeToCurrent(dateFrom, dateTo);
+const isPointPlanned = (dateFrom, dateTo) => dayjs(dateFrom).isAfter(dayjs()) || checkDatesRelativeToCurrent(dateFrom, dateTo);
 
-const checkFavoriteOption = (isFavorite) => (isFavorite) ? 'event__favorite-btn--active' : '';
+const isPointPassed = (dateFrom, dateTo) => dayjs(dateTo).isBefore(dayjs()) || checkDatesRelativeToCurrent(dateFrom, dateTo);
+
+const isFavoriteOption = (isFavorite) => (isFavorite) ? 'event__favorite-btn--active' : '';
 
 const capitalizeFirstLetter = (str) => str[0].toUpperCase() + str.slice(1);
 
-export {convertPointDateIntoDay, convertPointDateIntoHour, convertPointDateForEditForm, generateDates, subtractDates, checkFavoriteOption, capitalizeFirstLetter, isPointPlanned, isPointPassed};
+export {convertPointDateIntoDay, convertPointDateIntoHour, convertPointDateForEditForm, generateDates, subtractDates, isFavoriteOption, capitalizeFirstLetter, isPointPlanned, isPointPassed, isSubmitDisabledByDate};
