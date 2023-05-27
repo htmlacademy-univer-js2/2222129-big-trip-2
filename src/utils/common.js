@@ -5,19 +5,11 @@ const getRandomInteger = (a = 0, b = 1) => {
   return Math.floor(lower + Math.random() * (upper - lower + 1));
 };
 
-const updateItem = (items, updatedItem) => {
-  const index = items.findIndex((item) => item.id === updatedItem.id);
-
-  if (index === -1) {
-    return items;
+const updateItem = (items, updatedItem) => items.map((item) => {
+  if (item.id === updatedItem.id) {
+    return updatedItem;
   }
-
-  return [
-    ...items.slice(0, index),
-    updatedItem,
-    ...items.slice(index + 1),
-  ];
-};
-
+  return item;
+});
 
 export {getRandomInteger, updateItem};

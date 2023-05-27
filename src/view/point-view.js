@@ -3,18 +3,18 @@ import { convertPointDateIntoDay, convertPointDateIntoHour, subtractDates, check
 import { DESTINATIONS } from '../mock/point.js';
 import { OFFERS } from '../mock/offers.js';
 
-const createOfferTemplate = (offers) => {
-
+const createOffersListTemplate = (offers) => {
   const selectedOffers = offers.map((offer) => OFFERS.find((item) => item.id === offer));
 
-  return selectedOffers.map((offer) => `<li class="event__offer">
+  return (`<ul class="event__selected-offers">
+  ${selectedOffers.map((offer) => `<li class="event__offer">
   <span class="event__offer-title">${offer.title}</span>
   &plus;&euro;&nbsp;
   <span class="event__offer-price">${offer.price}</span>
-</li>`).join('\n');
-};
+</li>`).join('\n')}
+</ul>`);
 
-const createOffersListTemplate = (offers) => offers.length > 0 ? `<ul class="event__selected-offers">${createOfferTemplate(offers)}</ul>` : '';
+};
 
 const createPointTemplate = (point) => {
   const {basePrice, destination, startDate, endDate, isFavorite, offers, type} = point;
@@ -40,7 +40,7 @@ const createPointTemplate = (point) => {
         &euro;&nbsp;<span class="event__price-value">${basePrice}</span>
       </p>
       <h4 class="visually-hidden">Offers:</h4>
-      ${createOffersListTemplate(offers)}
+      ${(offers.length === 0) ? '' : createOffersListTemplate(offers)}
       <button class="event__favorite-btn ${checkFavoriteOption(isFavorite)}" type="button">
         <span class="visually-hidden">Add to favorite</span>
         <svg class="event__favorite-icon" width="28" height="28" viewBox="0 0 28 28">
