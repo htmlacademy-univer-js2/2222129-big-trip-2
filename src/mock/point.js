@@ -14,7 +14,7 @@ const DESTINATIONS = [
     name: 'Chamonix',
     pictures: [
       {
-        src: 'http://picsum.photos/300/200?r=0.0762563006163017',
+        src: 'https://placekitten.com/300/200',
         description: 'Chamonix parliament building'
       }
     ]
@@ -25,7 +25,7 @@ const DESTINATIONS = [
     name: 'Paris',
     pictures: [
       {
-        src: 'http://picsum.photos/300/200?r=0.0762563005163327',
+        src: 'https://placekitten.com/300/200',
         description: 'Somewhere in Paris'
       }
     ]
