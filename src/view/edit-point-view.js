@@ -23,24 +23,15 @@ const createAvailableOptionsTemplate = (offersByType, pointType) => {
 const createDestinationDescriptionTemplate = (destinations, pointName) => destinations.find((it) => it.name === pointName).description;
 
 
-const createPhotosListTemplate = (destinations, pointName) => {
-  const pictures = destinations.find((it) => it.name === pointName).pictures;
-
-  if (pictures !== undefined) {
-    const photosTemplate = pictures.map((picture) => `<img class="event__photo" src="${picture.src}" alt="Event photo">`).join('\n');
-
-    return `<div class="event__photos-container">
+const createPhotosListTemplate = (pictures) => (`<div class="event__photos-container">
     <div class="event__photos-tape">
-    ${photosTemplate}
+    ${pictures.map((picture) => `<img class="event__photo" src="${picture.src}" alt="Event photo">`).join('\n')}
     </div>
-    </div>`;
-  }
-  return '';
-};
+    </div>`);
 
 const createPointEditTemplate = (point) => {
   const {basePrice, destination, startDate, endDate, type} = point;
-  const pointName = DESTINATIONS.find((item) => (item.id === destination)).name;
+  const destinationData = DESTINATIONS.find((item) => (item.id === destination));
 
   return (
     `<form class="event event--edit" action="#" method="post">
@@ -97,7 +88,7 @@ const createPointEditTemplate = (point) => {
           <label class="event__label  event__type-output" for="event-destination-1">
           ${capitalizeFirstLetter(type)}
           </label>
-          <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${pointName}" list="destination-list-1">
+          <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${destinationData.name}" list="destination-list-1">
           <datalist id="destination-list-1">
             ${createDestionationsOptionsTemplate(DESTINATIONS)}
           </datalist>
@@ -131,8 +122,8 @@ const createPointEditTemplate = (point) => {
         </section>
         <section class="event__section  event__section--destination">
           <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-          <p class="event__destination-description">${createDestinationDescriptionTemplate(DESTINATIONS, pointName)}</p>
-          ${createPhotosListTemplate(DESTINATIONS, pointName)}
+          <p class="event__destination-description">${createDestinationDescriptionTemplate(DESTINATIONS, destinationData.name)}</p>
+          ${(!destinationData.pictures) ? '' : createPhotosListTemplate(destinationData.pictures)}
         </section>
       </section>
     </form>`

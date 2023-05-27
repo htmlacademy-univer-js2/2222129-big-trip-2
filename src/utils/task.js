@@ -14,7 +14,7 @@ const convertPointDateIntoHour = (pointDate) => dayjs(pointDate).format('HH:mm')
 const convertPointDateForEditForm = (pointDate) => dayjs(pointDate).format('DD/MM/YY HH:mm');
 
 const generateDates = () => {
-  const startDate = dayjs();
+  const startDate = dayjs().subtract(getRandomInteger(0, MIN_IN_HOUR * 2), 'minutes');
   return {
     startDate: startDate,
     endDate: startDate.add(getRandomInteger(MIN_IN_HOUR / 2, HOUR_IN_DAY * MIN_IN_HOUR * 2), 'minutes')
