@@ -1,12 +1,45 @@
 import { getRandomInteger } from '../utils/common';
-import { TYPES, OFFER_TITLES} from './const';
+import {OFFER_TITLES} from './const';
 
-const generateOfferTypes = () => TYPES.map((item) => (
+const OFFERS_BY_TYPE = [
   {
-    type: item,
-    offers: [... new Set(Array.from({length: getRandomInteger(1, OFFER_TITLES.length)}, () => getRandomInteger(1, OFFER_TITLES.length - 1)))],
-  }
-));
+    type: 'taxi',
+    offers: [6, 7],
+  },
+  {
+    type: 'bus',
+    offers: [],
+  },
+  {
+    type: 'train',
+    offers: [2, 9],
+  },
+  {
+    type: 'ship',
+    offers: [2, 9]
+  },
+  {
+    type: 'drive',
+    offers: [8]
+  },
+  {
+    type: 'flight',
+    offers: [2, 9, 10]
+  },
+  {
+    type: 'check-in',
+    offers: [1, 3, 4]
+  },
+  {
+    type: 'sightseeing',
+    offers: []
+  },
+  {
+    type: 'restaurant',
+    offers: []
+  },
+
+];
 
 const generateOffersArray = () => OFFER_TITLES.map((item, index) => (
   {
@@ -17,6 +50,5 @@ const generateOffersArray = () => OFFER_TITLES.map((item, index) => (
 ));
 
 const OFFERS = generateOffersArray();
-const OFFERS_BY_TYPE = generateOfferTypes();
 
 export {OFFERS, OFFERS_BY_TYPE};
