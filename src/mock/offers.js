@@ -1,62 +1,22 @@
-export const offersByType = [
+import { getRandomInteger } from '../utils/common';
+import { TYPES, OFFER_TITLES} from './const';
+
+const generateOfferTypes = () => TYPES.map((item) => (
   {
-    'type': 'taxi',
-    'offers': [
-      {
-        'id': 1,
-        'title': 'Upgrade to a business class',
-        'price': 120
-      },
-      {
-        'id': 2,
-        'title': 'Add luggage',
-        'price': 50
-      },
-      {
-        'id': 3,
-        'title': 'Switch to comfort class',
-        'price': 100
-      }
-    ]
-  },
-  {
-    'type': 'train',
-    'offers': [
-      {
-        'id': 4,
-        'title': 'Add luggage',
-        'price': 50
-      },
-      {
-        'id': 5,
-        'title': 'Switch to comfort class',
-        'price': 100
-      },
-      {
-        'id': 8,
-        'title': 'Add meal',
-        'price': 10
-      }
-    ]
-  },
-  {
-    'type': 'flight',
-    'offers': [
-      {
-        'id': 6,
-        'title': 'Add meal',
-        'price': 15
-      },
-      {
-        'id': 7,
-        'title': 'Choose seats',
-        'price': 5
-      },
-      {
-        'id': 9,
-        'title': 'Switch to comfort class',
-        'price': 100
-      }
-    ]
+    type: item,
+    offers: [... new Set(Array.from({length: getRandomInteger(1, OFFER_TITLES.length)}, () => getRandomInteger(1, OFFER_TITLES.length - 1)))],
   }
-];
+));
+
+const generateOffersArray = () => OFFER_TITLES.map((item, index) => (
+  {
+    id: index + 1,
+    title: item,
+    price: getRandomInteger(50, 300)
+  }
+));
+
+const OFFERS = generateOffersArray();
+const OFFERS_BY_TYPE = generateOfferTypes();
+
+export {OFFERS, OFFERS_BY_TYPE};

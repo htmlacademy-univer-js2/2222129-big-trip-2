@@ -1,12 +1,20 @@
-import { render, RenderPosition } from './render.js';
-import FilterView from './view/filter.js';
-import MenuView from './view/menu.js';
-import Trip from './presenter/trip.js';
+import { RenderPosition, render } from './framework/render.js';
+import PointsModel from './model/points-model.js';
+import PointFilterView from './view/filter-view.js';
+import RoutePresenter from './presenter/route-presenter.js';
+import TripInfoView from './view/trip-info-view.js';
 
-const menuContainer = document.querySelector('.trip-controls__navigation');
-const filterContainer = document.querySelector('.trip-controls__filters');
-const tripContainer = document.querySelector('.trip-events');
-const tripPresenter = new Trip({container: tripContainer});
-render(new FilterView, filterContainer, RenderPosition.BEFOREEND);
-render(new MenuView, menuContainer, RenderPosition.BEFOREEND);
-tripPresenter.init();
+const headerElement = document.querySelector('.page-header');
+const mainElement = document.querySelector('.page-body__page-main');
+const tripMainElement = document.querySelector('.trip-main');
+const tripControlsElement = headerElement.querySelector('.trip-controls__filters');
+const tripEventsElement = mainElement.querySelector('.trip-events');
+
+const routePresenter = new RoutePresenter();
+const pointsModel = new PointsModel();
+
+render(new TripInfoView(), tripMainElement, RenderPosition.AFTERBEGIN);
+render(new PointFilterView(), tripControlsElement);
+
+routePresenter.init(tripEventsElement, pointsModel);
+
