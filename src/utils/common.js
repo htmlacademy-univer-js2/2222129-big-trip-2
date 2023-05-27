@@ -5,6 +5,14 @@ const getRandomInteger = (a = 0, b = 1) => {
   return Math.floor(lower + Math.random() * (upper - lower + 1));
 };
 
-const updateItem = (items, updatedItem) => items.map((item) => item.id === updatedItem.id ? updatedItem : item );
+const getRandomOffersArray = (offers) => {
 
-export {getRandomInteger, updateItem};
+  if (!offers.length) {
+    return [];
+  }
+
+  return offers.slice(0, getRandomInteger(0, offers.length - 1));
+
+};
+
+export {getRandomInteger, getRandomOffersArray};

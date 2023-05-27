@@ -1,8 +1,7 @@
 import { nanoid } from 'nanoid';
 import { generateDates } from '../utils/task';
-import { getRandomInteger } from '../utils/common';
-import { TYPES } from './const';
-import { OFFERS } from './offers';
+import { getRandomInteger, getRandomOffersArray } from '../utils/common';
+import { OFFERS_BY_TYPE } from './offers';
 
 const MIN_PRICE = 100;
 const MAX_PRICE = 600;
@@ -38,15 +37,10 @@ const DESTINATIONS = [
 ];
 
 
-const generateType = () => {
-
-  const randomIndex = getRandomInteger(0, TYPES.length - 1);
-
-  return TYPES[randomIndex];
-};
-
 export const generatePoint = () => {
   const {startDate, endDate} = generateDates();
+
+  const randomOffersIndex = getRandomInteger(0, OFFERS_BY_TYPE.length - 1);
 
   return ({
     id: nanoid(),
@@ -55,8 +49,8 @@ export const generatePoint = () => {
     endDate:  endDate,
     destination: getRandomInteger(1, DESTINATIONS.length),
     isFavorite: Boolean(getRandomInteger(0, 1)),
-    offers: [... new Set(Array.from({length: getRandomInteger(0, OFFERS.length)}, () => getRandomInteger(1, OFFERS.length - 1)))],
-    type: generateType(),
+    offers: getRandomOffersArray(OFFERS_BY_TYPE[randomOffersIndex].offers),
+    type: OFFERS_BY_TYPE[randomOffersIndex].type,
   });
 };
 
