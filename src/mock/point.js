@@ -1,3 +1,4 @@
+import { nanoid } from 'nanoid';
 import { generateDates } from '../utils/task';
 import { getRandomInteger } from '../utils/common';
 import { TYPES } from './const';
@@ -33,12 +34,6 @@ const DESTINATIONS = [
     id: 3,
     description: 'Amsterdam, is a delightful free city',
     name: 'Amsterdam',
-    pictures: [
-      {
-        src: 'http://picsum.photos/300/200?r=0.0762563005163317',
-        description: 'Amsterdam or not'
-      }
-    ]
   }
 ];
 
@@ -54,6 +49,7 @@ export const generatePoint = () => {
   const {startDate, endDate} = generateDates();
 
   return ({
+    id: nanoid(),
     basePrice: getRandomInteger(MIN_PRICE, MAX_PRICE),
     startDate: startDate,
     endDate:  endDate,

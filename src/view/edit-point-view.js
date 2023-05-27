@@ -22,6 +22,22 @@ const createAvailableOptionsTemplate = (offersByType, pointType) => {
 
 const createDestinationDescriptionTemplate = (destinations, pointName) => destinations.find((it) => it.name === pointName).description;
 
+
+const createPhotosListTemplate = (destinations, pointName) => {
+  const pictures = destinations.find((it) => it.name === pointName).pictures;
+
+  if (pictures !== undefined) {
+    const photosTemplate = pictures.map((picture) => `<img class="event__photo" src="${picture.src}" alt="Event photo">`).join('\n');
+
+    return `<div class="event__photos-container">
+    <div class="event__photos-tape">
+    ${photosTemplate}
+    </div>
+    </div>`;
+  }
+  return '';
+};
+
 const createPointEditTemplate = (point) => {
   const {basePrice, destination, startDate, endDate, type} = point;
   const pointName = DESTINATIONS.find((item) => (item.id === destination)).name;
@@ -116,6 +132,7 @@ const createPointEditTemplate = (point) => {
         <section class="event__section  event__section--destination">
           <h3 class="event__section-title  event__section-title--destination">Destination</h3>
           <p class="event__destination-description">${createDestinationDescriptionTemplate(DESTINATIONS, pointName)}</p>
+          ${createPhotosListTemplate(DESTINATIONS, pointName)}
         </section>
       </section>
     </form>`
@@ -142,7 +159,7 @@ export default class PointEditView extends AbstractView {
 
   #pointRollUpHandler = (evt) => {
     evt.preventDefault();
-    this._callback.pointRollUp();
+    this._callback.pointRollUp(this.#point);
   };
 
   setPointSaveHandler = (callback) => {
@@ -153,7 +170,7 @@ export default class PointEditView extends AbstractView {
 
   #pointSaveHandler = (evt) => {
     evt.preventDefault();
-    this._callback.pointSave();
+    this._callback.pointSave(this.#point);
   };
 
 }
