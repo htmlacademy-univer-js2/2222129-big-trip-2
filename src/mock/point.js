@@ -1,32 +1,67 @@
-export const points = [
+import { generateDates } from '../utils/task';
+import { getRandomInteger } from '../utils/common';
+import { TYPES } from './const';
+import { OFFERS } from './offers';
+
+const MIN_PRICE = 100;
+const MAX_PRICE = 600;
+
+const DESTINATIONS = [
   {
-    'basePrice': 1100,
-    'dateFrom': '2019-10-10T12:10:59.845Z',
-    'dateTo': '2019-11-10T12:22:13.375Z',
-    'destination': 1,
-    'id': '0',
-    'isFavorite': true,
-    'offers': [1,2,3],
-    'type': 'taxi'
+    id: 1,
+    description: 'Chamonix, is a beautiful city, a true asian pearl, with crowded streets.',
+    name: 'Chamonix',
+    pictures: [
+      {
+        src: 'http://picsum.photos/300/200?r=0.0762563006163017',
+        description: 'Chamonix parliament building'
+      }
+    ]
   },
   {
-    'basePrice': 9900,
-    'dateFrom': '2020-07-10T22:55:56.845Z',
-    'dateTo': '2020-07-11T11:22:13.375Z',
-    'destination': 2,
-    'id': '1',
-    'isFavorite': true,
-    'offers': [4,5],
-    'type': 'train'
+    id: 2,
+    description: 'Paris, is a overcrowded dirty city.',
+    name: 'Paris',
+    pictures: [
+      {
+        src: 'http://picsum.photos/300/200?r=0.0762563005163327',
+        description: 'Somewhere in Paris'
+      }
+    ]
   },
   {
-    'basePrice': 700,
-    'dateFrom': '2021-07-10T22:55:56.845Z',
-    'dateTo': '2021-07-11T11:22:13.375Z',
-    'destination': 3,
-    'id': '2',
-    'isFavorite': false,
-    'offers': [6,7],
-    'type': 'flight'
+    id: 3,
+    description: 'Amsterdam, is a delightful free city',
+    name: 'Amsterdam',
+    pictures: [
+      {
+        src: 'http://picsum.photos/300/200?r=0.0762563005163317',
+        description: 'Amsterdam or not'
+      }
+    ]
   }
 ];
+
+
+const generateType = () => {
+
+  const randomIndex = getRandomInteger(0, TYPES.length - 1);
+
+  return TYPES[randomIndex];
+};
+
+export const generatePoint = () => {
+  const {startDate, endDate} = generateDates();
+
+  return ({
+    basePrice: getRandomInteger(MIN_PRICE, MAX_PRICE),
+    startDate: startDate,
+    endDate:  endDate,
+    destination: getRandomInteger(1, DESTINATIONS.length),
+    isFavorite: Boolean(getRandomInteger(0, 1)),
+    offers: [... new Set(Array.from({length: getRandomInteger(0, OFFERS.length)}, () => getRandomInteger(1, OFFERS.length - 1)))],
+    type: generateType(),
+  });
+};
+
+export {DESTINATIONS};
