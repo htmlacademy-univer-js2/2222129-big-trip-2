@@ -1,6 +1,5 @@
 import {remove, render, RenderPosition} from '../framework/render.js';
 import PointEditView from '../view/edit-point-view.js';
-import {nanoid} from 'nanoid';
 import {UserAction, UpdateType} from '../const.js';
 
 export default class PointNewPresenter {
@@ -8,20 +7,24 @@ export default class PointNewPresenter {
   #changeData = null;
   #pointEditComponent = null;
   #destroyCallback = null;
+  #offers = null;
+  #destinations = null;
 
   constructor(pointListContainer, changeData) {
     this.#pointListContainer = pointListContainer;
     this.#changeData = changeData;
   }
 
-  init = (callback) => {
+  init = (callback, offers, destinations) => {
+    this.#offers = offers;
+    this.#destinations = destinations;
     this.#destroyCallback = callback;
 
     if (this.#pointEditComponent !== null) {
       return;
     }
 
-    this.#pointEditComponent = new PointEditView();
+    this.#pointEditComponent = new PointEditView(undefined, this.#offers, this.#destinations);
     this.#pointEditComponent.setPointSaveHandler(this.#handlePointSave);
     this.#pointEditComponent.setDeleteClickHandler(this.#handlePointDelete);
     this.#pointEditComponent.setPointRollUpHandler(this.#handlePointClick);
@@ -44,13 +47,33 @@ export default class PointNewPresenter {
     document.removeEventListener('keydown', this.#escKeyDownHandler);
   };
 
+  setSaving = () => {
+    this.#pointEditComponent.updateElement(
+      {
+        isDisabled: true,
+        isSaving: true,
+      }
+    );
+  };
+
+  setAborting = () => {
+    const resetFormState = () => {
+      this.#pointEditComponent.updateElement({
+        isDisabled: false,
+        isSaving: false,
+        isDeleting: false,
+      });
+    };
+
+    this.#pointEditComponent.shake(resetFormState);
+  };
+
   #handlePointSave = (point) => {
     this.#changeData(
       UserAction.ADD_POINT,
       UpdateType.MINOR,
-      {id: nanoid(), ...point},
+      point,
     );
-    this.destroy();
   };
 
   #handlePointDelete = () => {

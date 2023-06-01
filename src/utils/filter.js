@@ -1,4 +1,4 @@
-import { isPointPlanned, isPointPassed } from './task';
+import { isPointPlanned, isPointPassed } from './point.js';
 import { FilterType } from '../const';
 
 const filter = {

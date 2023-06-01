@@ -1,20 +1,5 @@
 import dayjs from 'dayjs';
 
-const TYPES = ['taxi', 'bus', 'train', 'ship', 'drive', 'flight', 'check-in', 'sightseeing', 'restaurant'];
-
-const OFFER_TITLES = [
-  'Add breakfast',
-  'Add luggage',
-  'Add late check-out',
-  'Room with a beautiful view',
-  'Order a taxi',
-  'Switch to comfort',
-  'Switch to business',
-  'Rent a car',
-  'Upgrade to business class',
-  'Upgrade to Space+ Seat',
-];
-
 const FilterType = {
   EVERYTHING: 'everything',
   FUTURE: 'future',
@@ -37,16 +22,22 @@ const UpdateType = {
   PATCH: 'PATCH',
   MINOR: 'MINOR',
   MAJOR: 'MAJOR',
+  INIT: 'INIT',
 };
 
 const NEW_POINT = {
   basePrice: 0,
-  dateFrom: dayjs(),
-  dateTo: dayjs(),
+  startDate: dayjs(),
+  endDate: dayjs(),
   destination: 1,
   isFavorite: false,
   offers: [],
   type: 'taxi',
 };
 
-export {TYPES, OFFER_TITLES, NEW_POINT, FilterType, SortType, UserAction, UpdateType};
+const TimeLimit = {
+  LOWER_LIMIT: 350,
+  UPPER_LIMIT: 1000,
+};
+
+export {NEW_POINT, FilterType, SortType, UserAction, UpdateType, TimeLimit};
