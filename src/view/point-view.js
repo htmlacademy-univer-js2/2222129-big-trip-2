@@ -1,5 +1,5 @@
 import AbstractView from '../framework/view/abstract-view.js';
-import { convertPointDateIntoDay, convertPointDateIntoHour, subtractDates, isFavoriteOption, capitalizeFirstLetter } from '../utils/task.js';
+import { convertPointDateIntoDay, convertPointDateIntoHour, subtractDates, isFavoriteOption, capitalizeFirstLetter } from '../utils/point.js';
 
 const createOffersListTemplate = (pointType, pointOffers, allOffers) => {
 

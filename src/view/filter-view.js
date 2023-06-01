@@ -1,5 +1,5 @@
 import AbstractView from '../framework/view/abstract-view.js';
-import { capitalizeFirstLetter } from '../utils/task.js';
+import { capitalizeFirstLetter } from '../utils/point.js';
 
 const createPointFilterTemplate = (filter, currentFilterType) => {
   const {type, name, count} = filter;

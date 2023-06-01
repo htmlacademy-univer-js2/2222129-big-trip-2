@@ -2,7 +2,6 @@ import { render, replace, remove } from '../framework/render.js';
 import PointEditView from '../view/edit-point-view.js';
 import PointView from '../view/point-view.js';
 import { UserAction, UpdateType } from '../const.js';
-import { isDatesEqual } from '../utils/task.js';
 
 const Mode = {
   DEFAULT: 'default',
@@ -55,6 +54,7 @@ export default class PointPresenter {
 
     if (this.#mode === Mode.EDITING) {
       replace(this.#pointEditComponent, previousPointEditComponent);
+      this.#mode = Mode.DEFAULT;
     }
 
     remove(previousPointComponent);
@@ -74,6 +74,45 @@ export default class PointPresenter {
     }
   };
 
+  setSaving = () => {
+    if (this.#mode === Mode.EDITING) {
+      this.#pointEditComponent.updateElement(
+        {
+          isDisabled: true,
+          isSaving: true,
+        }
+      );
+    }
+  };
+
+  setDeleting = () => {
+    if (this.#mode === Mode.EDITING) {
+      this.#pointEditComponent.updateElement(
+        {
+          isDisabled: true,
+          isDeleting: true,
+        }
+      );
+    }
+  };
+
+  setAborting = () => {
+    if (this.#mode === Mode.DEFAULT) {
+      this.#pointComponent.shake();
+      return;
+    }
+
+    const resetFormState = () => {
+      this.#pointEditComponent.updateElement({
+        isDisabled: false,
+        isSaving: false,
+        isDeleting: false,
+      });
+    };
+
+    this.#pointEditComponent.shake(resetFormState);
+  };
+
   #replacePointToEditForm = () => {
     replace(this.#pointEditComponent, this.#pointComponent);
     document.addEventListener('keydown', this.#escKeyDownHandler);
@@ -90,7 +129,7 @@ export default class PointPresenter {
   #escKeyDownHandler = (evt) => {
     if (evt.key === 'Escape' || evt.key === 'Esc') {
       evt.preventDefault();
-      this.#pointEditComponent.reset(this.#point);
+      this.#pointEditComponent.reset(this.#point, this.#offers, this.#destinations);
       this.#replaceEditFormToPoint();
     }
   };
@@ -108,19 +147,19 @@ export default class PointPresenter {
   };
 
   #handlePointClick = () => {
-    this.#pointEditComponent.reset(this.#point, this.#offers, this.#destinations);
-    this.#replaceEditFormToPoint();
+    if (this.#mode !== Mode.DEFAULT) {
+      this.#pointEditComponent.reset(this.#point, this.#offers, this.#destinations);
+      this.#replaceEditFormToPoint();
+    }
   };
 
   #handlePointSave = (update) => {
-    const isMinorUpdate = isDatesEqual(this.#point.startDate, update.startDate);
 
     this.#changeData(
       UserAction.UPDATE_POINT,
-      isMinorUpdate ? UpdateType.PATCH : UpdateType.MINOR,
+      UpdateType.MINOR,
       update,
     );
-    this.#replaceEditFormToPoint();
   };
 
   #handlePointDelete = (point) => {

@@ -1,6 +1,5 @@
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
-import { getRandomInteger } from './common';
 
 dayjs.extend(duration);
 
@@ -12,14 +11,6 @@ const convertPointDateIntoDay = (pointDate) => dayjs(pointDate).format('MMM D');
 const convertPointDateIntoHour = (pointDate) => dayjs(pointDate).format('HH:mm');
 
 const convertPointDateForEditForm = (pointDate) => dayjs(pointDate).format('DD/MM/YY HH:mm');
-
-const generateDates = () => {
-  const startDate = dayjs().subtract(getRandomInteger(HOUR_IN_DAY * MIN_IN_HOUR * -2, HOUR_IN_DAY * MIN_IN_HOUR * 2), 'minutes');
-  return {
-    startDate: startDate,
-    endDate: startDate.add(getRandomInteger(MIN_IN_HOUR / 2, HOUR_IN_DAY * MIN_IN_HOUR * 2), 'minutes')
-  };
-};
 
 const subtractDates = (dateFrom, dateTo) => {
 
@@ -35,11 +26,15 @@ const subtractDates = (dateFrom, dateTo) => {
   return dayjs.duration(diffInTotalMinutes, 'minutes').format('DD[D] HH[H] mm[M]');
 };
 
-const isDatesEqual = (dateA, dateB) => dayjs(dateA).isSame(dateB, 'D');
-
 const isSubmitDisabledByDate = (dateTo, dateFrom) => dayjs(dateTo).diff(dayjs(dateFrom)) <= 0;
 
 const isSubmitDisabledByPrice = (price) => Number(price) > 0 && Number.isInteger(Number(price));
+
+const isSubmitDisabledByDestinationName = (name, allDestinations) => {
+  const allDestinationNames = Array.from(allDestinations, (it) => it.name);
+
+  return allDestinationNames.includes(name);
+};
 
 const checkDatesRelativeToCurrent = (dateFrom, dateTo) => dayjs(dateFrom).isBefore(dayjs()) && dayjs(dateTo).isAfter(dayjs());
 
@@ -51,4 +46,4 @@ const isFavoriteOption = (isFavorite) => (isFavorite) ? 'event__favorite-btn--ac
 
 const capitalizeFirstLetter = (str) => str[0].toUpperCase() + str.slice(1);
 
-export {convertPointDateIntoDay, convertPointDateIntoHour, convertPointDateForEditForm, generateDates, subtractDates, isFavoriteOption, capitalizeFirstLetter, isPointPlanned, isPointPassed, isSubmitDisabledByDate, isSubmitDisabledByPrice, isDatesEqual};
+export {convertPointDateIntoDay, convertPointDateIntoHour, convertPointDateForEditForm, subtractDates, isFavoriteOption, capitalizeFirstLetter, isPointPlanned, isPointPassed, isSubmitDisabledByDate, isSubmitDisabledByPrice, isSubmitDisabledByDestinationName};
