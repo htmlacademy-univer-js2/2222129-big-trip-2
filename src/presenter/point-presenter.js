@@ -1,7 +1,7 @@
 import { render, replace, remove } from '../framework/render.js';
 import PointEditView from '../view/edit-point-view.js';
 import PointView from '../view/point-view.js';
-import { UserAction, UpdateType } from '../mock/const.js';
+import { UserAction, UpdateType } from '../const.js';
 import { isDatesEqual } from '../utils/task.js';
 
 const Mode = {
@@ -17,6 +17,8 @@ export default class PointPresenter {
   #pointComponent = null;
   #pointEditComponent = null;
   #point = null;
+  #offers = null;
+  #destinations = null;
   #mode = Mode.DEFAULT;
 
   constructor(pointListContainer, changeData, switchMode) {
@@ -25,14 +27,16 @@ export default class PointPresenter {
     this.#switchMode = switchMode;
   }
 
-  init = (point) => {
+  init = (point, offers, destinations) => {
     this.#point = point;
+    this.#offers = offers;
+    this.#destinations = destinations;
 
     const previousPointComponent = this.#pointComponent;
     const previousPointEditComponent = this.#pointEditComponent;
 
-    this.#pointComponent = new PointView(point);
-    this.#pointEditComponent = new PointEditView(point);
+    this.#pointComponent = new PointView(this.#point, this.#offers, this.#destinations);
+    this.#pointEditComponent = new PointEditView(this.#point, this.#offers, this.#destinations);
 
     this.#pointComponent.setEditRollUpHandler(this.#handleEditClick);
     this.#pointEditComponent.setPointRollUpHandler(this.#handlePointClick);
@@ -65,7 +69,7 @@ export default class PointPresenter {
 
   resetView = () => {
     if (this.#mode !== Mode.DEFAULT) {
-      this.#pointEditComponent.reset(this.#point);
+      this.#pointEditComponent.reset(this.#point, this.#offers, this.#destinations);
       this.#replaceEditFormToPoint();
     }
   };
@@ -104,7 +108,7 @@ export default class PointPresenter {
   };
 
   #handlePointClick = () => {
-    this.#pointEditComponent.reset(this.#point);
+    this.#pointEditComponent.reset(this.#point, this.#offers, this.#destinations);
     this.#replaceEditFormToPoint();
   };
 

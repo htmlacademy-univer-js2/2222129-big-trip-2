@@ -1,10 +1,11 @@
 import AbstractView from '../framework/view/abstract-view.js';
 import { convertPointDateIntoDay, convertPointDateIntoHour, subtractDates, isFavoriteOption, capitalizeFirstLetter } from '../utils/task.js';
-import { DESTINATIONS } from '../mock/point.js';
-import { OFFERS } from '../mock/offers.js';
 
-const createOffersListTemplate = (offers) => {
-  const selectedOffers = offers.map((offer) => OFFERS.find((item) => item.id === offer));
+const createOffersListTemplate = (pointType, pointOffers, allOffers) => {
+
+  const allOffersForType = allOffers.find((item) => item.type === pointType).offers;
+
+  const selectedOffers = pointOffers.map((offer) => allOffersForType.find((item) => item.id === offer));
 
   return (`<ul class="event__selected-offers">
   ${selectedOffers.map((offer) => `<li class="event__offer">
@@ -16,9 +17,10 @@ const createOffersListTemplate = (offers) => {
 
 };
 
-const createPointTemplate = (point) => {
+const createPointTemplate = (point, allOffers, allDestinations) => {
+
   const {basePrice, destination, startDate, endDate, isFavorite, offers, type} = point;
-  const pointName = DESTINATIONS.find((item) => (item.id === destination)).name;
+  const pointName = allDestinations.find((item) => (item.id === destination)).name;
 
   return (
     `<li class="trip-events__item">
@@ -40,7 +42,7 @@ const createPointTemplate = (point) => {
         &euro;&nbsp;<span class="event__price-value">${basePrice}</span>
       </p>
       <h4 class="visually-hidden">Offers:</h4>
-      ${(!offers.length) ? '' : createOffersListTemplate(offers)}
+      ${(!offers.length) ? '' : createOffersListTemplate(type, offers, allOffers)}
       <button class="event__favorite-btn ${isFavoriteOption(isFavorite)}" type="button">
         <span class="visually-hidden">Add to favorite</span>
         <svg class="event__favorite-icon" width="28" height="28" viewBox="0 0 28 28">
@@ -56,16 +58,19 @@ const createPointTemplate = (point) => {
 };
 
 export default class PointView extends AbstractView {
-
+  #allOffers = null;
+  #allDestinations = null;
   #point = null;
 
-  constructor(point) {
+  constructor(point, allOffers, allDestinations) {
     super();
     this.#point = point;
+    this.#allOffers = allOffers;
+    this.#allDestinations = allDestinations;
   }
 
   get template() {
-    return createPointTemplate(this.#point);
+    return createPointTemplate(this.#point, this.#allOffers, this.#allDestinations);
   }
 
   setEditRollUpHandler = (callback) => {
