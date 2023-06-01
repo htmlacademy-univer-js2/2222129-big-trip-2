@@ -1,7 +1,7 @@
 import {remove, render, RenderPosition} from '../framework/render.js';
 import PointEditView from '../view/edit-point-view.js';
 import {nanoid} from 'nanoid';
-import {UserAction, UpdateType} from '../mock/const.js';
+import {UserAction, UpdateType} from '../const.js';
 
 export default class PointNewPresenter {
   #pointListContainer = null;

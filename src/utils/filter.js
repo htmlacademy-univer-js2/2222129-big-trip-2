@@ -1,5 +1,5 @@
 import { isPointPlanned, isPointPassed } from './task';
-import { FilterType } from '../mock/const';
+import { FilterType } from '../const';
 
 const filter = {
   [FilterType.EVERYTHING]: (points) => points.map((point) => point),

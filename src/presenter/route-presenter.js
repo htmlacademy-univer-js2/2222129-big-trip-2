@@ -1,11 +1,12 @@
-import { render, remove } from '../framework/render.js';
+import { render, remove, RenderPosition } from '../framework/render.js';
 import EmptyListView from '../view/empty-list-view.js';
+import LoadingView from '../view/loading-view.js';
 import PointListView from '../view/point-list-view.js';
 import PointSortView from '../view/sort-view.js';
 import PointPresenter from './point-presenter.js';
 import PointNewPresenter from './point-new-presenter.js';
 import { filter } from '../utils/filter.js';
-import { SortType, UpdateType, UserAction, FilterType } from '../mock/const.js';
+import { SortType, UpdateType, UserAction, FilterType } from '../const.js';
 import { sortPointsByPrice, sortPointsByDuration, sortPointsByDate } from '../utils/sort.js';
 
 export default class RoutePresenter {
@@ -15,12 +16,14 @@ export default class RoutePresenter {
   #sortComponent = null;
 
   #pointListComponent = new PointListView();
+  #loadingComponent = new LoadingView();
   #emptyListComponent = null;
 
   #pointPresenter = new Map();
   #pointNewPresenter = null;
   #currentSortType = SortType.DEFAULT;
   #filterType = FilterType.EVERYTHING;
+  #isLoading = true;
 
   constructor(routeContainer, pointsModel, filterModel) {
 
@@ -30,7 +33,6 @@ export default class RoutePresenter {
 
     this.#pointNewPresenter = new PointNewPresenter(this.#pointListComponent.element, this.#handleViewAction);
 
-
     this.#pointsModel.addObserver(this.#handleModelEvent);
     this.#filterModel.addObserver(this.#handleModelEvent);
   }
@@ -38,6 +40,7 @@ export default class RoutePresenter {
   get points() {
     this.#filterType = this.#filterModel.filter;
     const points = this.#pointsModel.points;
+
     const filteredPoints = filter[this.#filterType](points);
 
     switch (this.#currentSortType) {
@@ -50,6 +53,15 @@ export default class RoutePresenter {
 
     }
   }
+
+  get offers() {
+    return this.#pointsModel.offers;
+  }
+
+  get destinations() {
+    return this.#pointsModel.destinations;
+  }
+
 
   init = () => {
     this.#renderBoard();
@@ -97,6 +109,11 @@ export default class RoutePresenter {
         this.#clearBoard({resetSortType: true});
         this.#renderBoard();
         break;
+      case UpdateType.INIT:
+        this.#isLoading = false;
+        remove(this.#loadingComponent);
+        this.#renderBoard();
+        break;
       default:
         throw new Error(`Update Type ${updateType} is undefined.`);
     }
@@ -118,7 +135,7 @@ export default class RoutePresenter {
     }
 
     this.#sortComponent = new PointSortView(this.#currentSortType);
-    render(this.#sortComponent, this.#routeContainer);
+    render(this.#sortComponent, this.#routeContainer, RenderPosition.AFTERBEGIN);
     this.#sortComponent.setSortTypeChangeHandler(this.#handleSortTypeChange);
   };
 
@@ -130,7 +147,7 @@ export default class RoutePresenter {
 
   #renderPoint = (point) => {
     const pointPresenter = new PointPresenter(this.#pointListComponent.element, this.#handleViewAction, this.#handleModeSwitch);
-    pointPresenter.init(point);
+    pointPresenter.init(point, this.offers, this.destinations);
     this.#pointPresenter.set(point.id, pointPresenter);
   };
 
@@ -138,9 +155,19 @@ export default class RoutePresenter {
     points.forEach((point) => this.#renderPoint(point));
   };
 
+  #renderLoading = () => {
+    render(this.#loadingComponent, this.#routeContainer);
+  };
+
   #renderBoard = () => {
     const points = this.points;
     const pointsCount = points.length;
+    render(this.#pointListComponent, this.#routeContainer);
+
+    if (this.#isLoading) {
+      this.#renderLoading();
+      return;
+    }
 
     if (pointsCount === 0) {
       this.#renderEmptyList();
@@ -148,7 +175,7 @@ export default class RoutePresenter {
     }
 
     this.#renderSort();
-    render(this.#pointListComponent, this.#routeContainer);
+
     this.#renderPoints(points);
 
   };
@@ -160,6 +187,7 @@ export default class RoutePresenter {
 
     remove(this.#sortComponent);
     remove(this.#emptyListComponent);
+    remove(this.#loadingComponent);
 
     if (this.#emptyListComponent) {
       remove(this.#emptyListComponent);
