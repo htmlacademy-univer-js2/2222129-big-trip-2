@@ -51,7 +51,6 @@ export default class TripInfoPresenter {
   };
 
   #handleModelEvent = () => {
-
     this.init();
   };
 

@@ -11,4 +11,4 @@ const sortPointsByDuration = (pointA, pointB) => {
 
 const sortPointsByDate = (pointA, pointB) => dayjs(pointA.startDate) - dayjs(pointB.startDate);
 
-export {sortPointsByPrice, sortPointsByDuration, sortPointsByDate};
+export { sortPointsByPrice, sortPointsByDuration, sortPointsByDate };

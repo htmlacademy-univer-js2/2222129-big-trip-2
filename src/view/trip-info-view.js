@@ -3,41 +3,38 @@ import dayjs from 'dayjs';
 
 const addOffersPrices = (pointType, pointOffers, allOffers) => {
 
-  const allOffersForType = allOffers.find((item) => item.type === pointType).offers;
+  const allOffersForType = allOffers.find(({ type }) => type === pointType).offers;
 
-  const selectedOfferPrices = pointOffers.map((offer) => allOffersForType.find((item) => item.id === offer).price);
+  const selectedOfferPrices = pointOffers.map((offer) => allOffersForType.find(({ id }) => id === offer).price);
 
   return selectedOfferPrices.reduce((sum, price) => sum + price, 0);
 
 };
 
-const addDestinationName = (pointDestination, allDestinations) => allDestinations.find((item) => item.id === pointDestination).name;
+const addDestinationName = (pointDestination, allDestinations) => allDestinations.find(({ id }) => id === pointDestination).name;
 
 const getTripDestinationNames = (points) => {
 
   const tripDestinationNames = points.map((point) => point.destinationName);
 
-  const uniqueNames = Array.from(new Set(tripDestinationNames));
-
-  switch (uniqueNames.length) {
+  switch (tripDestinationNames.length) {
     case 1:
-      return `${uniqueNames[0]}`;
+      return `${tripDestinationNames[0]}`;
     case 2:
-      return `${uniqueNames[0]} &mdash; ${uniqueNames[1]}`;
+      return `${tripDestinationNames[0]} &mdash; ${tripDestinationNames[1]}`;
     case 3:
-      return `${uniqueNames[0]} &mdash; ${uniqueNames[1]} &mdash; ${uniqueNames[2]}`;
+      return `${tripDestinationNames[0]} &mdash; ${tripDestinationNames[1]} &mdash; ${tripDestinationNames[2]}`;
     default:
-      return `${uniqueNames[0]} &mdash; ... &mdash;${uniqueNames[uniqueNames.length - 1]}`;
+      return `${tripDestinationNames[0]} &mdash; ... &mdash;${tripDestinationNames[tripDestinationNames.length - 1]}`;
   }
 
 };
 
 const getTripPrice = (points) => {
 
-  const totalBasePrice = points.reduce((total, point) => total + point.basePrice, 0);
-  const totalOffersPrice = points.reduce((total, point) => total + point.offerPrices, 0);
+  const totalPrice = points.reduce((total, point) => total + point.basePrice + point.offerPrices, 0);
 
-  return totalBasePrice + totalOffersPrice;
+  return totalPrice;
 };
 
 const getTripDates = (points) => {
