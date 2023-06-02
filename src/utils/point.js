@@ -46,4 +46,4 @@ const isFavoriteOption = (isFavorite) => (isFavorite) ? 'event__favorite-btn--ac
 
 const capitalizeFirstLetter = (str) => str[0].toUpperCase() + str.slice(1);
 
-export {convertPointDateIntoDay, convertPointDateIntoHour, convertPointDateForEditForm, subtractDates, isFavoriteOption, capitalizeFirstLetter, isPointPlanned, isPointPassed, isSubmitDisabledByDate, isSubmitDisabledByPrice, isSubmitDisabledByDestinationName};
+export { convertPointDateIntoDay, convertPointDateIntoHour, convertPointDateForEditForm, subtractDates, isFavoriteOption, capitalizeFirstLetter, isPointPlanned, isPointPassed, isSubmitDisabledByDate, isSubmitDisabledByPrice, isSubmitDisabledByDestinationName };

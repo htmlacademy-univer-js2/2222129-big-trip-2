@@ -6,7 +6,7 @@ import PointListView from '../view/point-list-view.js';
 import PointSortView from '../view/sort-view.js';
 import PointPresenter from './point-presenter.js';
 import PointNewPresenter from './point-new-presenter.js';
-import { filter } from '../utils/filter.js';
+import { Filter } from '../utils/filter.js';
 import { SortType, UpdateType, UserAction, FilterType, TimeLimit } from '../const.js';
 import { sortPointsByPrice, sortPointsByDuration, sortPointsByDate } from '../utils/sort.js';
 
@@ -44,7 +44,7 @@ export default class RoutePresenter {
     this.#filterType = this.#filterModel.filter;
     const points = this.#pointsModel.points;
 
-    const filteredPoints = filter[this.#filterType](points);
+    const filteredPoints = Filter[this.#filterType](points);
 
     switch (this.#currentSortType) {
       case SortType.PRICE:

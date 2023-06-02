@@ -1,5 +1,5 @@
 import { render, replace, remove } from '../framework/render.js';
-import PointEditView from '../view/edit-point-view.js';
+import PointEditView from '../view/point-edit-view.js';
 import PointView from '../view/point-view.js';
 import { UserAction, UpdateType } from '../const.js';
 
@@ -154,7 +154,6 @@ export default class PointPresenter {
   };
 
   #handlePointSave = (update) => {
-
     this.#changeData(
       UserAction.UPDATE_POINT,
       UpdateType.MINOR,
