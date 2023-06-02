@@ -23,12 +23,12 @@ const filterPresenter = new FilterPresenter(tripControlsElement, filterModel, po
 const tripInfoPresenter = new TripInfoPresenter(tripMainElement, pointsModel);
 const newPointButtonComponent = new NewPointButtonView();
 
-const handleNewPointFormClose = () => {
+const newPointFormCloseHandler = () => {
   newPointButtonComponent.element.disabled = false;
 };
 
-const handleNewPointButtonClick = () => {
-  routePresenter.createPoint(handleNewPointFormClose);
+const newPointButtonClickHandler = () => {
+  routePresenter.createPoint(newPointFormCloseHandler);
 
   newPointButtonComponent.element.disabled = true;
 };
@@ -39,6 +39,6 @@ routePresenter.init();
 pointsModel.init()
   .finally(() => {
     render(newPointButtonComponent, tripMainElement);
-    newPointButtonComponent.setClickHandler(handleNewPointButtonClick);
+    newPointButtonComponent.setClickHandler(newPointButtonClickHandler);
   });
 tripInfoPresenter.init();

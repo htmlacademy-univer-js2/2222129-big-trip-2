@@ -40,9 +40,9 @@ const createPhotosListTemplate = (pictures) => `<div class="event__photos-contai
     </div>
     </div>`;
 
-const createTypeListTemplate = (allOffers) => allOffers
-  .map(({ type }) => `<div class="event__type-item">
-  <input id="event-type-${type}" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${type}">
+const createTypeListTemplate = (allOffers, currentType) => allOffers
+  .map(({type}) => `<div class="event__type-item">
+  <input id="event-type-${type}" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${type}" ${type === currentType ? 'checked' : ''}>
   <label class="event__type-label  event__type-label--${type}" for="event-type-${type}">${capitalizeFirstLetter(type)}</label>
 </div>`).join('\n');
 
@@ -69,7 +69,7 @@ const createPointEditTemplate = (point, allOffers, allDestinations) => {
           <div class="event__type-list">
             <fieldset class="event__type-group">
               <legend class="visually-hidden">Event type</legend>
-              ${createTypeListTemplate(allOffers)}
+              ${createTypeListTemplate(allOffers, type)}
             </fieldset>
           </div>
         </div>

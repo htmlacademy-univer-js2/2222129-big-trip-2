@@ -20,7 +20,8 @@ const subtractDates = (dateFrom, dateTo) => {
 
   if ((diffInDays === 0) && (diffInHours === 0)) {
     return dayjs.duration(diffInTotalMinutes, 'minutes').format('mm[M]');
-  } else if (diffInDays === 0) {
+  }
+  if (diffInDays === 0) {
     return dayjs.duration(diffInTotalMinutes, 'minutes').format('HH[H] mm[M]');
   }
   return dayjs.duration(diffInTotalMinutes, 'minutes').format('DD[D] HH[H] mm[M]');
