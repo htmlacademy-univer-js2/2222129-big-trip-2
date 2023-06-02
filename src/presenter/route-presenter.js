@@ -34,10 +34,10 @@ export default class RoutePresenter {
     this.#pointsModel = pointsModel;
     this.#filterModel = filterModel;
 
-    this.#pointNewPresenter = new PointNewPresenter(this.#pointListComponent.element, this.#handleViewAction);
+    this.#pointNewPresenter = new PointNewPresenter(this.#pointListComponent.element, this.#viewActionHandler);
 
-    this.#pointsModel.addObserver(this.#handleModelEvent);
-    this.#filterModel.addObserver(this.#handleModelEvent);
+    this.#pointsModel.addObserver(this.#modelEventHandler);
+    this.#filterModel.addObserver(this.#modelEventHandler);
   }
 
   get points() {
@@ -78,12 +78,12 @@ export default class RoutePresenter {
     this.#pointNewPresenter.init(callback, this.offers, this.destinations);
   };
 
-  #handleModeSwitch = () => {
+  #modeSwitchHandler = () => {
     this.#pointNewPresenter.destroy();
     this.#pointPresenter.forEach((presenter) => presenter.resetView());
   };
 
-  #handleViewAction = async (actionType, updateType, update) => {
+  #viewActionHandler = async (actionType, updateType, update) => {
     this.#uiBlocker.block();
 
     switch (actionType) {
@@ -118,7 +118,7 @@ export default class RoutePresenter {
     this.#uiBlocker.unblock();
   };
 
-  #handleModelEvent = (updateType, data) => {
+  #modelEventHandler = (updateType, data) => {
     switch (updateType) {
       case UpdateType.PATCH:
         this.#pointPresenter.get(data.id).init(data);
@@ -141,7 +141,7 @@ export default class RoutePresenter {
     }
   };
 
-  #handleSortTypeChange = (sortType) => {
+  #sortTypeChangeHandler = (sortType) => {
     if (this.#currentSortType === sortType) {
       return;
     }
@@ -158,7 +158,7 @@ export default class RoutePresenter {
 
     this.#sortComponent = new PointSortView(this.#currentSortType);
     render(this.#sortComponent, this.#routeContainer, RenderPosition.AFTERBEGIN);
-    this.#sortComponent.setSortTypeChangeHandler(this.#handleSortTypeChange);
+    this.#sortComponent.setSortTypeChangeHandler(this.#sortTypeChangeHandler);
   };
 
 
@@ -168,7 +168,7 @@ export default class RoutePresenter {
   };
 
   #renderPoint = (point) => {
-    const pointPresenter = new PointPresenter(this.#pointListComponent.element, this.#handleViewAction, this.#handleModeSwitch);
+    const pointPresenter = new PointPresenter(this.#pointListComponent.element, this.#viewActionHandler, this.#modeSwitchHandler);
     pointPresenter.init(point, this.offers, this.destinations);
     this.#pointPresenter.set(point.id, pointPresenter);
   };

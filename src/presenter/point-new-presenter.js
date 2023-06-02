@@ -25,9 +25,9 @@ export default class PointNewPresenter {
     }
 
     this.#pointEditComponent = new PointEditView(undefined, this.#offers, this.#destinations);
-    this.#pointEditComponent.setPointSaveHandler(this.#handlePointSave);
-    this.#pointEditComponent.setDeleteClickHandler(this.#handlePointDelete);
-    this.#pointEditComponent.setPointRollUpHandler(this.#handlePointClick);
+    this.#pointEditComponent.setPointSaveHandler(this.#pointSaveHandler);
+    this.#pointEditComponent.setDeleteClickHandler(this.#pointDeleteHandler);
+    this.#pointEditComponent.setPointRollUpHandler(this.#pointClickHandler);
 
     render(this.#pointEditComponent, this.#pointListContainer, RenderPosition.AFTERBEGIN);
 
@@ -68,7 +68,7 @@ export default class PointNewPresenter {
     this.#pointEditComponent.shake(resetFormState);
   };
 
-  #handlePointSave = (point) => {
+  #pointSaveHandler = (point) => {
     this.#changeData(
       UserAction.ADD_POINT,
       UpdateType.MINOR,
@@ -76,12 +76,12 @@ export default class PointNewPresenter {
     );
   };
 
-  #handlePointDelete = () => {
+  #pointDeleteHandler = () => {
     this.destroy();
     document.removeEventListener('keydown', this.#escKeyDownHandler);
   };
 
-  #handlePointClick = () => {
+  #pointClickHandler = () => {
     this.destroy();
     document.removeEventListener('keydown', this.#escKeyDownHandler);
   };

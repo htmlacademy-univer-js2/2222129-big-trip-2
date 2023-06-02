@@ -12,7 +12,7 @@ export default class TripInfoPresenter {
     this.#tripInfoContainer = tripInfoContainer;
     this.#pointsModel = pointsModel;
 
-    this.#pointsModel.addObserver(this.#handleModelEvent);
+    this.#pointsModel.addObserver(this.#modelEventHandler);
 
   }
 
@@ -50,8 +50,7 @@ export default class TripInfoPresenter {
     this.#tripInfoComponent = null;
   };
 
-  #handleModelEvent = () => {
+  #modelEventHandler = () => {
     this.init();
   };
-
 }
